@@ -55,7 +55,7 @@ public class Dog {
         // bunu neden kullandığımızı anlamadım ama "name", "breed" ve "age" variable'larının hepsini stringe çeviriyor 
         // - public static void main(String[] args) de kullanabilirdik sanki - void kullanılmamış String kullanılmış neden return var
     {
-        return "The name of the gdog is " + name + ". The breed of the dog is " + breed + ". The age of the dog is " + age + ".";
+        return "The name of the dog is " + name + ". The breed of the dog is " + breed + ". The age of the dog is " + age + ".";
     }
 
     public static void main(String[] args) {
