@@ -43,3 +43,116 @@ if re.search(r"^.+@.+\.edu$", email):
     print("Valid")
 else:
     print("Invalid")
+
+
+# this way the code still support string like "kaankanadasi@@@gmail.com"
+# [] - set of characters
+# [^] - complementing the set
+if re.search(r"^[^@]+@[^@]+\.edu$", email):
+    print("Valid")
+else:
+    print("Invalid")
+# [^@] == anything except an @ sign
+
+
+# [a-z] means you can only write characters from the alphabet from a through z
+# A-Z is for uppercase letters
+# 0-9 is for all numbers
+# _ 
+if re.search(r"^[a-zA-Z0-9_]+@[a-zA-Z0-9_]+\.edu$", email):
+    print("Valid")
+else:
+    print("Invalid")
+
+
+# \w is for representing a word character, this code is same as in lines 62-65
+if re.search(r"^\w+@\w+\.edu$", email):
+    print("Valid")
+else:
+    print("Invalid")
+
+
+# \d decimal digit
+# \D not a decimal digit
+# \s whitesapce characters
+# \S not a whitesapce characters
+# \w word character ... as well as numbers and underscores
+# \W not a word character
+
+
+# this now also accepts .edu or .com or .gov at the end of the string
+# also we added .lower() in the second  parameter since emails should be in lower case
+if re.search(r"^\w+@\w+\.(edu|com|gov)$", email.lower()):
+    print("Valid")
+else:
+    print("Invalid")
+
+
+# this way by eliminating .lower() and adding a thrid parameter, if we don't want to chamge the users input but ignore case 
+if re.search(r"^\w+@\w+\.(edu|com|gov)$", email, re.IGNORECASE):
+    print("Valid")
+else:
+    print("Invalid")
+
+
+# this way the code does not vlaidate codes that has dots after or before the @ sign
+# (\w+\.)? means we can have a dor after a word character and by adding '?' it can have 0 or more repetitions 
+if re.search(r"^\w+@(\w+\.)?\w+\.(edu|com|gov)$", email, re.IGNORECASE):
+    print("Valid")
+else:
+    print("Invalid")
+
+
+
+# cleaning users input
+name = input("What's your name? ").strip()
+# if the user writes something like Kaan, Kanadaşı
+if "," in name:
+    last,  first = name.split(", ")
+    name = f"{first} {last}"
+print(f"hello, {name}")
+# however this code breaks of when we dont have a space after the comma like Kaan,Kanadaşı -> Value Error
+
+
+# if writer writes Kanadaşı,Kaan 
+# ', *' states that we can have 0 or more whitespace after comma
+name = input("What's your name? ").strip()
+matches = re.search(r"(^.)+, *().+)$", name)
+if matches:
+    last, first = matches.groups()
+    name = f"{first} {last}"
+print(f"hello, {name}")
+
+# or
+
+name = input("What's your name? ").strip()
+# we put the assignment statement inside if and changed the '=' to ':=' to still assign the value to matches
+if matches := re.search(r"(^.)+, *().+)$", name):
+    name = matches.group(2) + " " + matches.group(1)
+print(f"hello, {name}")
+
+
+
+# we want to get the username from a url
+url = input("URL : ").strip()
+username = url.replace("https://twitter.com/", "")
+print(f"Username: {username}")
+
+# using the re library
+username_r = re.sub(r"https://twitter.com/", "", url)
+
+# we added ^sicne the stirgn that we are trying to replace is at the start of the string 
+# . before the com means that the user can type anyhting in the comntext of re library, so we should change it to \.
+# since the https could be http we add a ? before the s
+# if we are in the world wide web there could be www. so we add (www\.)?
+# https?:// is optional so we add (https?://)?
+username_r = re.sub(r"^(https?://)?(www\.)?twitter\.com/", "", url)
+
+# the username will be in the .+ part so we add paranthesis to capture that username
+if matches := re.search(r"https?://(www\.)?witter\.com/(.+)$", url , re.IGNORECASE):
+    # we call mathces.group(2) sicne we have two matches, first match - (www\.) and the second match (.+) which is the usernmae
+    print(f"hello, {matches.group(2)}")
+
+# since we don't want to capture the first group and ignroe the parnthesis we use the synthx (?:...)
+if matches := re.search(r"https?://(?:www\.)?witter\.com/(.+)$", url , re.IGNORECASE):
+    print(f"hello, {matches.group(1)}")
